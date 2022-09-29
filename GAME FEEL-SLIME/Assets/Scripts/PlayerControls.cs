@@ -80,7 +80,7 @@ public class PlayerControls : MonoBehaviour
 
         if(horizontal > 0 && !facingRight || (horizontal < 0 && facingRight))
         {
-            Flip();
+            //Flip();
         }
         // if(Mathf.Abs(rb.velocity.x) > maxSpeed)
         // {
