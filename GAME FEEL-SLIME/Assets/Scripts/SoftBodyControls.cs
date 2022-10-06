@@ -31,6 +31,7 @@ private float coyoteTimeCounter;
 
 
     public ParticleSystem trail;
+    public GameObject trailPos;
  
 
 
@@ -45,7 +46,8 @@ private float coyoteTimeCounter;
 
     void Update()
     {   
-        Debug.Log(onGround);
+        trailPos.transform.position = new Vector3 (transform.position.x, transform.position.y, 1);
+        //Debug.Log(onGround);
         onGround = IsGrounded();
 
     if (onGround)
@@ -93,7 +95,7 @@ private float coyoteTimeCounter;
 
         if(moveInput.x > 0.3 || moveInput.x < -0.3 )
         {
-           CreateTrail();
+           //CreateTrail();
         }
 
     
@@ -134,7 +136,10 @@ private float coyoteTimeCounter;
         {
             rb.AddForce(Vector2.up * jumpPower);
         }
-   }
+        //gameObject.GetComponent<Animator>().SetTrigger("Stretch");
+        CreateTrail();
+        SoundManager.PlaySound("jump");
+    }
 
     private bool IsGrounded()
    {
