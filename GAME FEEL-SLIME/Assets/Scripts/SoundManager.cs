@@ -9,7 +9,7 @@ public class SoundManager : MonoBehaviour
     static AudioSource audioSrc;
     void Start()
     {   
-        playerJump = (AudioClip)AssetDatabase.LoadAssetAtPath("Assets/Audio/Jump2.wav", typeof(AudioClip));
+        playerJump = (AudioClip)AssetDatabase.LoadAssetAtPath("Assets/Audio/Jump.mp3", typeof(AudioClip));
         audioSrc = GetComponent<AudioSource>(); 
     }
 
@@ -25,9 +25,15 @@ public class SoundManager : MonoBehaviour
             case "jump":
                 audioSrc.PlayOneShot(playerJump);
             break;
-            case "fall":
+            case "run":
                 audioSrc.PlayOneShot(playerJump);
             break;
         }
+    }
+
+    public static void pause()
+    {   
+        audioSrc.clip = playerJump;
+        audioSrc.Pause();
     }
 }

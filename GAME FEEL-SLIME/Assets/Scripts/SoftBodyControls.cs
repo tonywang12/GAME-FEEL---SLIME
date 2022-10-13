@@ -12,6 +12,7 @@ public class SoftBodyControls : MonoBehaviour
     public float acceleration;
     public float decceleration;
     public float velPower;
+    private bool moving = false;
 
     public Transform groundCheck;
    public LayerMask groundLayer;
@@ -24,17 +25,18 @@ public class SoftBodyControls : MonoBehaviour
     Rigidbody2D[] componentBodies;
 
     public float jumpPower;
-private float coyoteTimeCounter;
+    private float coyoteTimeCounter;
    public float coyoteTime;
    private float jumpBufferCounter;
    public float jumpBufferTime;
 
 
     public ParticleSystem trail;
+    public ParticleSystem runTrail;
     public GameObject trailPos;
  
 
-
+    public Shake cam;
     [Header("Physics")]
     //public float maxSpeed = 7f;
     public float linearDrag = 4f;
@@ -50,19 +52,35 @@ private float coyoteTimeCounter;
         //Debug.Log(onGround);
         onGround = IsGrounded();
 
-    if (onGround)
-     {    
+        if (onGround)
+        {    
           coyoteTimeCounter = coyoteTime;
-     } else
-     {
+        } else
+        {
           coyoteTimeCounter -= Time.deltaTime;
-     }
+        }
 
-    //If jump isn't pressed -- jumpbuffer to check if jump is able to do in time
-     if (!Gamepad.current.buttonSouth.wasPressedThisFrame && !Keyboard.current.spaceKey.wasPressedThisFrame)
-     {
+        //If jump isn't pressed -- jumpbuffer to check if jump is able to do in time
+        if (!Gamepad.current.buttonSouth.wasPressedThisFrame && !Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
           jumpBufferCounter -= Time.deltaTime;
-     }
+        }
+
+        if(moveInput.x == 0)
+        {
+            moving = false;
+        } else
+        {
+        moving = true;
+        }
+
+        if(moving)
+        {   
+            SoundManager.PlaySound("Run");
+        } else
+        {
+
+        }
     }
 
     void FixedUpdate()
@@ -83,20 +101,12 @@ private float coyoteTimeCounter;
             rb.AddForce(Vector2.right * moveInput.x * moveSpeed);
         } 
 
-        if(moveInput.x > 0 && !facingRight)
+        if(moveInput.x > 0.4 || moveInput.x < -0.4)
         {
-           //Flip();
+           //CreateRunTrail();
         }
 
-        if(moveInput.x < 0 && facingRight)
-        {
-            //Flip();
-        }
-
-        if(moveInput.x > 0.3 || moveInput.x < -0.3 )
-        {
-           //CreateTrail();
-        }
+        
 
     
 
@@ -139,6 +149,7 @@ private float coyoteTimeCounter;
         //gameObject.GetComponent<Animator>().SetTrigger("Stretch");
         CreateTrail();
         SoundManager.PlaySound("jump");
+        cam.Screenshake();
     }
 
     private bool IsGrounded()
@@ -175,5 +186,8 @@ private float coyoteTimeCounter;
 
    void CreateTrail(){
      trail.Play();
+   }
+   void CreateRunTrail(){
+     runTrail.Play();
    }
 }
